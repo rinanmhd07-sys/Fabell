@@ -351,7 +351,7 @@ function placeOrder(){const id='#IND-'+(1000+Math.floor(Math.random()*9000)),tot
  const items=state.cart.map(x=>({n:byId(x.id).n,size:x.size,qty:x.qty}));state.orders.unshift({id,date:d,total,stage:0,cancelled:false,items});state.cart=[];upBadge();
  $('#ovl').innerHTML=`<div class="ovl succ"><div class="in"><div class="ck">${ic('check')}</div><h2>Order placed!</h2><p>Thank you for shopping with Fabell. Your order details are below.</p><div class="oid">${id}</div><div class="box">${items.map(i=>`<div class="ln"><span>${i.n}${i.size?' · '+i.size:''} × ${i.qty}</span></div>`).join('')}<div class="ln t"><span>Total (Cash on Delivery)</span><span>${rs(total)}</span></div></div><button class="btn dk" style="width:100%" data-a="orders">View my orders</button></div></div>`;chime();confetti()}
 /* ---------- events ---------- */
-document.addEventListener('click',e=>{const el=e.target.closest('[data-a]');if(!el)return;const a=el.dataset.a,id=el.dataset.id;
+document.addEventListener('click',async e=>{const el=e.target.closest('[data-a]');if(!el)return;const a=el.dataset.a,id=el.dataset.id;
  switch(a){
  case'wish':{const n=+id;state.wishlist.has(n)?state.wishlist.delete(n):state.wishlist.add(n);$$(`[data-a="wish"][data-id="${n}"]`).forEach(b=>b.classList.toggle('on',state.wishlist.has(n)));break}
  case'home':hist.length=0;state.currentScreen='home';state.params={};render();break;case'profile':go('profile');break;case'search':go('search');break;case'cart':go('cart');break;case'back':back();break;
