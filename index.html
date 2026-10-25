@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+<meta name="color-scheme" content="light">
+<title>Fabell</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--bg:#f4f4f4;--card:#fff;--ink:#111;--mut:#777;--line:#e5e5e5;--red:#111;--radius:16px;--hero-height:58dvh;color-scheme:light}
+html,body{margin:0;background:#dcdcdc;font-family:Inter,-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,sans-serif;color:var(--ink);overflow-x:hidden}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;padding:0}
+input{font:inherit;color:inherit}
+.frame{max-width:430px;min-height:100vh;min-height:100dvh;margin:0 auto;background:var(--bg);position:relative;box-shadow:0 0 40px rgba(0,0,0,.15)}
+.scr{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;animation:fin .25s ease;padding-top:env(safe-area-inset-top,0px)}
+@keyframes fin{from{opacity:0}to{opacity:1}}
+svg{display:block}
+.ic{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ib{width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.8);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;position:relative;flex:none}
+.sec .ib{background:#fff;border:1px solid var(--line)}
+.pill{height:44px;border-radius:30px;padding:0 14px;gap:6px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.8);backdrop-filter:blur(8px);position:relative;font-weight:600;font-size:14px}
+.badge{position:absolute;top:-3px;right:-3px;min-width:18px;height:18px;border-radius:9px;background:var(--red);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 4px}
+.badge:empty,.badge.z{display:none}
+/* headers */
+.hh{position:absolute;top:0;left:0;right:0;z-index:6;display:flex;justify-content:space-between;padding:calc(16px + env(safe-area-inset-top,0px)) 16px 0}
+.hh .r{display:flex;gap:8px}
+.hdr{position:relative;height:66px;display:flex;align-items:center;justify-content:space-between;padding:0 16px}
+.hdr h1{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);margin:0;font-size:17px;font-weight:700;pointer-events:none;white-space:nowrap}
+.hdr .r{display:flex;gap:8px;min-width:44px;justify-content:flex-end}
+/* hero */
+.brand-wordmark{position:absolute;z-index:7;top:calc(24px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);font-size:12px;font-weight:900;letter-spacing:.18em;color:#fff;text-shadow:0 1px 6px #0008;max-width:48%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:none}.has-announcement .brand-wordmark{top:calc(54px + env(safe-area-inset-top,0px))}.slide .art:has(img){inset:0;right:0;top:0;width:100%;height:100%}.announcement{min-height:30px;padding:7px 12px;text-align:center;background:var(--ink);color:var(--bg);font-size:10px;font-weight:700;letter-spacing:.08em}.has-announcement .hh{top:30px}.hero{position:relative;height:clamp(340px,var(--hero-height),520px);overflow:hidden;background:#333;touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:pointer}
+.slide{position:absolute;inset:0;opacity:0;transition:opacity .7s ease;pointer-events:none}
+.slide.on{opacity:1}
+.slide .art{position:absolute;right:-6%;top:6%;width:100%;height:70%}
+.slide .ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.6),rgba(0,0,0,0) 60%)}
+.slide .tx{position:absolute;left:20px;right:20px;bottom:62px;color:#fff}
+.slide h2{margin:0 0 8px;font-size:clamp(36px,11.5vw,46px);line-height:.98;font-weight:700;letter-spacing:-1.8px;max-width:260px}
+.slide p{margin:0 0 16px;font-size:14px;opacity:.9}
+.cta{display:inline-flex;align-items:center;gap:10px;background:#fff;color:#111;border-radius:30px;height:44px;padding:0 6px 0 18px;font-weight:600;font-size:14px}
+.cta i{width:32px;height:32px;border-radius:50%;background:#111;color:#fff;display:flex;align-items:center;justify-content:center}
+.cta i .ic{width:14px;height:14px}
+.tag{position:absolute;right:20px;bottom:76px;color:#fff;font-size:13px;display:flex;gap:8px;align-items:center;max-width:120px;line-height:1.25}
+.tag .ic{width:24px;height:24px;flex:none}
+.dots{position:absolute;bottom:26px;left:0;right:0;display:flex;justify-content:center;gap:6px;z-index:3}
+.dots b{width:30px;height:3px;border-radius:3px;background:rgba(255,255,255,.4);transition:background .3s}
+.dots b.on{background:#fff}
+/* categories */
+.cats{display:flex;gap:8px;overflow-x:auto;padding:10px 12px;scrollbar-width:none}
+.cats::-webkit-scrollbar{display:none}
+.cat{flex:none;display:flex;align-items:center;gap:8px;padding:6px 16px 6px 6px;border-radius:30px;background:#fafafa;border:1px solid var(--line);font-size:14px;font-weight:500;color:var(--mut);transition:.2s}
+.cat.nt{padding-left:16px}
+.cat i{width:30px;height:30px;border-radius:50%;background:#fff;display:block;overflow:hidden}
+.cat.on{background:#111;border-color:#111;color:#fff}
+/* grid */
+.cols{display:flex;gap:8px;padding:4px 12px 24px}
+.col{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px}
+.pc{background:var(--card);border-radius:var(--radius);overflow:hidden;position:relative;cursor:pointer}
+.pi{background:#f1f1f1;width:100%}
+.pi svg{width:100%;height:100%}
+.pb{padding:10px 12px 14px}
+.pb small{display:block;color:var(--mut);font-size:12px;margin-bottom:2px}
+.pb b{display:block;font-size:14px;font-weight:600;line-height:1.25}
+.pb span{display:block;font-size:15px;font-weight:700;margin-top:4px}
+.heart{position:absolute;top:10px;right:10px;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center;z-index:2;flex:none}
+.heart .ic{width:18px;height:18px;transition:fill .15s,stroke .15s}
+.hh .heart{position:static;width:44px;height:44px;top:auto;right:auto}
+.heart.on .ic{fill:var(--red);stroke:var(--red)}
+.empty{padding:50px 20px;text-align:center;color:var(--mut);font-size:14px}
+/* buttons */
+.btn{height:52px;border-radius:30px;font-weight:600;font-size:15px;display:flex;align-items:center;justify-content:center;padding:0 24px;transition:transform .1s}
+.btn:active{transform:scale(.97)}
+.dk{background:var(--red);color:#fff}
+.ol{background:#fff;color:#111;border:1.5px solid #111}
+.sm{height:40px;font-size:13px;padding:0 16px}
+/* detail */
+.gal{position:relative;height:min(58vh,520px);height:min(58dvh,520px);min-height:320px;overflow:hidden;touch-action:pan-y;user-select:none;-webkit-user-select:none}
+.trk{display:flex;height:100%;transition:transform .35s ease}
+.trk.drag{transition:none}
+.gs{flex:none;width:100%;height:100%}
+.gal .hh{padding-top:calc(12px + env(safe-area-inset-top,0px))}
+.gal .dots{bottom:16px}
+.gal .dots b{background:rgba(0,0,0,.15);width:28px}
+.gal .dots b.on{background:#111}
+.info{padding:18px 20px 12px;background:var(--bg)}
+.cp{display:inline-block;background:#fff;border:1px solid var(--line);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:500;margin-bottom:10px}
+.tr{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.tr h2{margin:0;font-size:22px;font-weight:700;letter-spacing:-.4px}
+.tr span{font-size:22px;font-weight:700}
+.info p{color:var(--mut);font-size:14px;line-height:1.5;margin:8px 0 0}
+.sz{margin-top:18px}.sz h4{margin:0 0 10px;font-size:14px;font-weight:600}
+.szs{display:flex;gap:8px;flex-wrap:wrap}
+.szs button{min-width:52px;height:44px;padding:0 14px;border-radius:30px;background:#fff;border:1px solid var(--line);font-size:14px;font-weight:500;transition:.15s}
+.szs button.on{background:#111;color:#fff;border-color:#111}
+.bar{flex:none;position:relative;margin-top:auto;background:#fff;padding:14px 16px calc(14px + env(safe-area-inset-bottom,0px));border-radius:22px 22px 0 0;display:flex;gap:10px;align-items:center;z-index:4;box-shadow:0 -4px 20px rgba(0,0,0,.05)}
+.bar .btn{flex:1}
+/* cart */
+.ci{display:flex;gap:12px;background:#fff;border-radius:16px;padding:10px;margin:0 12px 8px;align-items:stretch}
+.ci .th{width:84px;height:84px;border-radius:12px;background:#f1f1f1;flex:none;overflow:hidden}
+.ci .th svg{width:100%;height:100%}
+.ci .m{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:space-between}
+.ci small{color:var(--mut);font-size:12px}
+.ci b{font-size:14px;font-weight:600;display:block;line-height:1.25}
+.ci .pr{font-size:17px;font-weight:700}
+.ci .rt{display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;font-size:12px;color:var(--mut)}
+.qty{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600;color:var(--ink)}
+.qty button{width:36px;height:36px;border-radius:10px;background:#f3f3f3;font-size:16px;display:flex;align-items:center;justify-content:center}
+.del{width:40px;height:40px;border-radius:50%;background:#fde8ea;color:var(--red);display:flex;align-items:center;justify-content:center;align-self:center;flex:none}
+.del .ic{width:16px;height:16px}
+.sum{display:flex;justify-content:space-between;align-items:center;width:100%}
+.sum small{color:var(--mut);font-size:13px;display:block}
+.sum strong{font-size:22px}
+.sum .btn{min-width:150px}
+/* cards */
+.box{background:#fff;border-radius:16px;padding:16px;margin:0 12px 10px}
+.box h3{margin:0 0 10px;font-size:15px;font-weight:700;display:flex;justify-content:space-between;align-items:center}
+.box p{margin:0;color:var(--mut);font-size:14px;line-height:1.5}
+.box .nm{color:var(--ink);font-weight:600}
+.cod{display:flex;align-items:center;gap:12px;border:1.5px solid #111;border-radius:14px;padding:12px}
+.rad{width:20px;height:20px;border-radius:50%;border:6px solid #111;flex:none}
+.cod b{display:block;font-size:14px}.cod span{font-size:12px;color:var(--mut)}
+.ln{display:flex;justify-content:space-between;font-size:14px;color:var(--mut);padding:5px 0}
+.ln.t{color:var(--ink);font-weight:700;font-size:16px;border-top:1px solid var(--line);margin-top:6px;padding-top:12px}
+/* search */
+.sb{margin:0 12px 10px;height:48px;border-radius:30px;background:#fff;border:1px solid var(--line);display:flex;align-items:center;gap:10px;padding:0 16px;color:var(--mut)}
+.sb input{flex:1;border:0;outline:0;background:none;font-size:15px;min-width:0}
+.gp{display:flex;gap:8px;padding:0 12px 10px}
+.gp[hidden]{display:none}
+.gp button{padding:8px 18px;border-radius:30px;background:#fafafa;border:1px solid var(--line);font-size:13px;font-weight:500;color:var(--mut)}
+.gp button.on{background:#111;color:#fff;border-color:#111}
+.sh{padding:6px 20px 10px;font-size:15px;font-weight:700}
+.sr{display:flex;gap:12px;align-items:center;background:#fff;border-radius:16px;padding:10px;margin:0 12px 8px;cursor:pointer}
+.sr .th{width:64px;height:64px;border-radius:12px;background:#f1f1f1;overflow:hidden;flex:none}
+.sr .th svg{width:100%;height:100%}
+.sr small{color:var(--mut);font-size:12px}.sr b{display:block;font-size:14px}.sr span{font-weight:700;font-size:14px}
+/* profile */
+.ph{display:flex;gap:14px;align-items:center}
+.av{width:60px;height:60px;border-radius:50%;background:#f1f1f1;display:flex;align-items:center;justify-content:center;flex:none}
+.av .ic{width:28px;height:28px}
+.ph .i{flex:1;min-width:0}.ph b{font-size:17px;display:block}.ph small{color:var(--mut);font-size:13px;display:block;margin-top:2px;line-height:1.4}
+.oh{display:flex;justify-content:space-between;align-items:center}
+.st{font-size:12px;font-weight:600;padding:4px 10px;border-radius:20px;background:#fff3d6;color:#9a6a00}
+.st.d{background:#dff5e3;color:#1c7a34}.st.c{background:#fde8ea;color:var(--red)}
+.oa{display:flex;gap:8px;margin-top:12px}
+.oa .btn{flex:1}
+/* overlays */
+.ovl{position:fixed;inset:0;max-width:430px;margin:0 auto;z-index:50;display:flex;align-items:flex-end;background:rgba(0,0,0,.45);animation:fin .2s}
+.sheet{background:#fff;width:100%;border-radius:24px 24px 0 0;padding:20px 20px calc(20px + env(safe-area-inset-bottom,0px));max-height:90vh;overflow:auto}
+.sheet h3{margin:0 0 14px;font-size:18px}
+.fld{margin-bottom:10px}.fld label{display:block;font-size:12px;color:var(--mut);margin-bottom:4px}
+.fld input{width:100%;height:46px;border-radius:12px;border:1px solid var(--line);background:#fafafa;padding:0 14px;font-size:15px;outline:0}
+.fld input:focus{border-color:#111}
+.fr{display:flex;gap:10px}.fr .fld{flex:1}
+.err{color:var(--red);font-size:13px;min-height:18px;margin-bottom:6px}
+.stp{display:flex;justify-content:space-between;position:relative;margin:10px 0 6px}
+.stp:before{content:"";position:absolute;left:12%;right:12%;top:13px;height:3px;background:#e5e5e5}
+.stp i{position:absolute;left:12%;top:13px;height:3px;background:#111;transition:width .4s}
+.sp{width:25%;text-align:center;font-size:12px;position:relative;color:var(--mut);font-weight:500}
+.sp u{display:flex;width:28px;height:28px;border-radius:50%;background:#e5e5e5;margin:0 auto 8px;align-items:center;justify-content:center;color:#fff;text-decoration:none}
+.sp.on{color:var(--ink)}.sp.on u{background:#111}
+.sp u .ic{width:14px;height:14px;stroke-width:3}
+.succ{align-items:center;justify-content:center;background:#fff;padding:20px;z-index:60}
+.succ .in{text-align:center;width:100%;position:relative;z-index:2}
+.ck{width:76px;height:76px;border-radius:50%;background:#111;color:#fff;margin:0 auto 18px;display:flex;align-items:center;justify-content:center;animation:pop .5s}
+.ck .ic{width:36px;height:36px;stroke-width:2.5}
+@keyframes pop{from{transform:scale(0)}60%{transform:scale(1.15)}to{transform:scale(1)}}
+.succ h2{margin:0 0 6px;font-size:26px}.succ p{margin:0;color:var(--mut);font-size:14px}
+.oid{display:inline-block;margin:16px 0;background:#f4f4f4;border-radius:30px;padding:8px 18px;font-weight:700}
+.succ .box{margin:0 0 16px;text-align:left}
+#cf{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:70}
+.toast{position:fixed;left:50%;bottom:100px;transform:translate(-50%,20px);background:#111;color:#fff;padding:12px 22px;border-radius:30px;font-size:14px;font-weight:500;opacity:0;transition:.3s;z-index:80;pointer-events:none;white-space:nowrap}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+/* app shell: header + independent scroll area + fixed bottom bar */
+.scr.fx{height:100vh;height:100dvh;min-height:0;overflow:hidden}
+.hdr{flex:none}
+.scroll{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;display:flex;flex-direction:column;padding-bottom:16px}
+.scroll>*{flex:none}
+.scroll .empty{margin:auto}
+.bar{box-shadow:0 -1px 0 var(--line),0 -10px 24px rgba(0,0,0,.04)}
+.sum>div:first-child{min-width:0}
+:focus-visible{outline:2px solid #111;outline-offset:2px}
+.sheet{max-height:90vh;max-height:90dvh;overscroll-behavior:contain}
+.sheet:before{content:"";display:block;width:40px;height:4px;border-radius:2px;background:#ddd;margin:-8px auto 16px}
+.fld input,.sb input{font-size:16px}
+.succ{overflow-y:auto;align-items:flex-start}.succ .in{margin:auto 0}
+.cat{min-height:44px}.gp button{min-height:40px}
+@media(max-width:359px){.tag{display:none}.slide h2{max-width:100%}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style></head><body>
+<div class="frame" id="app"></div>
+<div id="ovl"></div><canvas id="cf" hidden></canvas><div class="toast" id="toast"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const rs=n=>'₹'+Number(n).toLocaleString('en-IN');
+const esc=v=>String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const I={
+ user:'<path d="M20 21v-1.5a4.5 4.5 0 0 0-4.5-4.5h-7A4.5 4.5 0 0 0 4 19.5V21"/><circle cx="12" cy="7.5" r="4"/>',
+ search:'<circle cx="11" cy="11" r="7"/><path d="m20 20-3.8-3.8"/>',
+ bag:'<path d="M5 8h14l1 12H4z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/>',
+ back:'<path d="M19 12H5M11 6l-6 6 6 6"/>',
+ heart:'<path d="M12 20.5s-7.5-4.6-9.2-9.4C1.6 7.700 3.700 4.500 7 4.500c2 0 3.500 1.100 5 3 1.500-1.900 3-3 5-3 3.300 0 5.400 3.200 4.200 6.600-1.700 4.800-9.200 9.400-9.200 9.400z"/>',
+ share:'<circle cx="18" cy="5" r="2.500"/><circle cx="6" cy="12" r="2.500"/><circle cx="18" cy="19" r="2.500"/><path d="m8.200 10.800 7.600-4.600M8.200 13.200l7.600 4.600"/>',
+ edit:'<path d="M4 20h4L19 9a2.800 2.800 0 0 0-4-4L4 16z"/><path d="m13.500 6.500 4 4"/>',
+ trash:'<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>',
+ arrow:'<path d="M5 12h14M13 6l6 6-6 6"/>',
+ snow:'<path d="M12 2v20M3.300 7l17.400 10M3.300 17 20.700 7M9 3.500l3 2.500 3-2.500M9 20.500l3-2.500 3 2.500"/>',
+ check:'<path d="m5 12.500 4.500 4.500L19 7.500"/>',
+ grid:'<rect x="4" y="4" width="6" height="6" rx="1.500"/><rect x="14" y="4" width="6" height="6" rx="1.500"/><rect x="4" y="14" width="6" height="6" rx="1.500"/><rect x="14" y="14" width="6" height="6" rx="1.500"/>'
+};
+const ic=(n,c='')=>`<svg class="ic ${c}" viewBox="0 0 24 24">${I[n]}</svg>`;
+/* ---------- product art (inline vector illustrations) ---------- */
+const SW="M70 30Q100 48 130 30L165 50 182 140 156 146 146 92 142 172H58L54 92 44 146 18 140 35 50Z";
+function shape(k,c){
+ const o='stroke="rgba(0,0,0,.28)" stroke-width="1.500" stroke-linejoin="round"';
+ switch(k){
+ case'sweater':return `<path d="${SW}" fill="${c}" ${o}/><path d="M70 30Q100 48 130 30" fill="none" stroke="rgba(0,0,0,.3)" stroke-width="5"/><path d="M58 160H142M54 120l-3 22M146 120l3 22" stroke="rgba(0,0,0,.12)" stroke-width="3" fill="none"/>`;
+ case'tee':return `<path d="M68 34Q100 54 132 34L172 58 154 92 138 82V172H62V82L46 92 28 58Z" fill="${c}" ${o}/><path d="M68 34Q100 54 132 34" fill="none" stroke="rgba(0,0,0,.3)" stroke-width="4"/>`;
+ case'hoodie':return `<path d="${SW}" fill="${c}" ${o}/><path d="M68 34Q100 6 132 34Q100 76 68 34Z" fill="rgba(255,255,255,.14)" ${o}/><path d="M92 66v36M108 66v36" stroke="rgba(255,255,255,.5)" stroke-width="2"/><path d="M76 122H124L130 150H70Z" fill="rgba(0,0,0,.14)"/>`;
+ case'jacket':return `<path d="${SW}" fill="${c}" ${o}/><path d="M100 46V172" stroke="rgba(0,0,0,.35)" stroke-width="2"/><path d="M70 30L88 56 100 46 112 56 130 30Q100 48 70 30Z" fill="rgba(0,0,0,.2)"/><rect x="66" y="112" width="24" height="20" rx="3" fill="rgba(0,0,0,.12)"/><rect x="110" y="112" width="24" height="20" rx="3" fill="rgba(0,0,0,.12)"/>`;
+ case'sneaker':return `<path d="M20 124Q22 92 50 90L70 98Q92 102 102 86L112 80Q142 94 170 112Q186 120 184 140H20Z" fill="${c}" ${o}/><path d="M18 140H186V156Q186 164 176 164H28Q18 164 18 156Z" fill="#f4f4f2" ${o}/><path d="M84 94l8 10M96 88l8 10M108 84l8 10" stroke="rgba(0,0,0,.35)" stroke-width="2.500" stroke-linecap="round"/><path d="M44 120Q70 112 100 126" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="4" stroke-linecap="round"/>`;
+ case'cap':return `<path d="M40 122Q40 54 100 54Q160 54 160 122Z" fill="${c}" ${o}/><path d="M130 116Q192 112 192 130Q150 138 120 126Z" fill="${c}" ${o}/><path d="M100 54V122" stroke="rgba(0,0,0,.2)" stroke-width="2"/><circle cx="100" cy="54" r="4" fill="rgba(0,0,0,.3)"/>`;
+ case'beanie':return `<path d="M46 126Q46 50 100 50Q154 50 154 126Z" fill="${c}" ${o}/><rect x="40" y="118" width="120" height="30" rx="8" fill="${c}" ${o}/><path d="M40 133H160" stroke="rgba(0,0,0,.2)" stroke-width="2"/><path d="M70 60V118M100 52V118M130 60V118" stroke="rgba(0,0,0,.1)" stroke-width="2"/>`;
+ case'bag':default:return `<path d="M30 104Q30 80 54 80H146Q170 80 170 104V146Q170 160 154 160H46Q30 160 30 146Z" fill="${c}" ${o}/><path d="M64 80Q64 48 100 48Q136 48 136 80" fill="none" stroke="rgba(0,0,0,.5)" stroke-width="6" stroke-linecap="round"/><path d="M30 112H170" stroke="rgba(255,255,255,.25)" stroke-width="2"/><rect x="88" y="104" width="24" height="16" rx="3" fill="rgba(255,255,255,.3)"/>`;
+ }}
+const BG=['#f1f1f1','#e8e8e4','#f5f2ec'],TF=['','rotate(-7 100 100) scale(.95)','translate(0 6) scale(1.08)'];
+const art=(k,c,v=0)=>`<svg viewBox="0 0 200 200" preserveAspectRatio="xMidYMid meet"><g transform="${TF[v]}">${shape(k,c)}</g></svg>`;
+/* ---------- data ---------- */
+let P=[
+{id:1,n:'Sweater Heavyweight',c:'Clothing',t:'Sweater',g:'Unisex',p:3499,k:'sweater',col:'#b9bec1',d:'Soft heavyweight knit with a relaxed oversized fit. Designed for everyday comfort and minimal styling.',nw:1},
+{id:2,n:'Oversized Graphic Tee',c:'Clothing',t:'T-Shirt',g:'Men',p:1299,k:'tee',col:'#1f1f1f',d:'Boxy 240 GSM cotton tee with a dropped shoulder and a clean back print. Made to be worn loose.'},
+{id:3,n:'Chernim Cherno Hoodie',c:'Clothing',t:'Hoodie',g:'Unisex',p:2999,k:'hoodie',col:'#161616',d:'Brushed fleece hoodie with a double-layer hood and contrast piping. Heavy, warm and rested on the hips.'},
+{id:4,n:'Ashwave Denim Jacket',c:'Clothing',t:'Jacket',g:'Men',p:4999,k:'jacket',col:'#b9aa8c',d:'Stone-washed denim with a boxy cut and a worn-in, sandy finish. Layers over anything.'},
+{id:5,n:'Blue Striped Shirt',c:'Clothing',t:'Shirt',g:'Women',p:1799,k:'tee',col:'#8fb1d6',d:'Breezy camp-collar shirt in a crisp vertical stripe. Easy, short sleeves and a relaxed drape.'},
+{id:6,n:'Cropped Puffer Jacket',c:'Clothing',t:'Jacket',g:'Women',p:5499,k:'jacket',col:'#66775a',d:'Lightweight recycled fill in a cropped silhouette. Warm without the bulk.'},
+{id:7,n:'Court Low Grey',c:'Shoes',t:'Sneakers',g:'Unisex',p:6999,k:'sneaker',col:'#c9cdd0',d:'Clean low-top with a leather upper and a cushioned sole. A daily pair that goes with everything.'},
+{id:8,n:'Court Low Sage',c:'Shoes',t:'Sneakers',g:'Women',p:5999,k:'sneaker',col:'#a7b698',d:'Soft sage panels on a classic court shape. Light, flexible and easy to wear all day.'},
+{id:9,n:'Street Runner Black',c:'Shoes',t:'Sneakers',g:'Men',p:6499,k:'sneaker',col:'#242424',d:'Chunky runner profile with a breathable mesh upper and grippy outsole.'},
+{id:10,n:'Wool Beanie',c:'Hats',t:'Beanie',g:'Unisex',p:899,k:'beanie',col:'#8c5b4c',d:'Chunky rib-knit beanie in a soft wool blend. Stretches to fit.'},
+{id:11,n:'Washed Cap',c:'Hats',t:'Cap',g:'Men',p:999,k:'cap',col:'#5d6c79',d:'Six-panel cotton cap with a washed finish and an adjustable strap.'},
+{id:12,n:'Weekender Duffel',c:'Bags',t:'Duffel',g:'Unisex',p:3299,k:'bag',col:'#1c1c1c',d:'Roomy water-resistant duffel with a padded handle and a zip pocket. Made for short trips.'},
+{id:13,n:'Mini Crossbody',c:'Bags',t:'Sling Bag',g:'Women',p:1999,k:'bag',col:'#c6a07a',d:'Compact sling with an adjustable strap, sized for your phone, cards and keys.'}
+];
+const byId=id=>P.find(p=>p.id==id);
+let SL=[
+{h:'Winter Deal',s:'Warm gear. Cool prices.',b:'Shop Now',cat:'Clothing',k:'jacket',col:'#7d8a63',bg:'linear-gradient(160deg,#a5afa0,#4c5645)',tag:['snow','15% off new collection']},
+{h:'Street Kicks',s:'Premium drops. Elevated style.',b:'Explore Collection',cat:'Shoes',k:'sneaker',col:'#e9e9e6',bg:'linear-gradient(160deg,#b4bac2,#59616b)',tag:['grid','New drops every week']},
+{h:'Headwear & More',s:'Minimalist accessories.',b:'Grab Sneakers',cat:'Hats',k:'beanie',col:'#93604f',bg:'linear-gradient(160deg,#cdbfae,#7b6a58)',tag:['bag','Minimal essentials']}
+];
+SL[2].b='Shop Headwear';
+/* ---------- state ---------- */
+const state={cart:[],wishlist:new Set(),currentScreen:'home',params:{},searchQuery:'',sGender:'',selectedCategory:'All',size:null,
+ userProfile:{name:'',phone:'',house:'',road:'',city:'',state:'',pin:''},
+ orders:[]};
+const hist=[];let heroT,heroI=0;
+const sizesFor=p=>Array.isArray(p?.sizes)&&p.sizes.length?p.sizes:(p?.c==='Clothing'?['S','M','L','XL','XXL']:p?.c==='Shoes'?['IND 6','IND 7','IND 8','IND 9','IND 10']:null);
+const cartCount=()=>state.cart.reduce((a,b)=>a+b.qty,0);
+const subtotal=()=>state.cart.reduce((a,b)=>a+byId(b.id).p*b.qty,0);
+const addr=u=>`${u.house}, ${u.road}, ${u.city}, ${u.state} - ${u.pin}`;
+const addrOK=u=>['name','phone','house','road','city','state','pin'].every(k=>u[k]);
+const hasProfile=u=>!!(u.name||u.phone||u.house);
+/* ---------- templates ---------- */
+const heart=id=>`<button class="heart ${state.wishlist.has(id)?'on':''}" data-a="wish" data-id="${id}" aria-label="Wishlist">${ic('heart')}</button>`;
+const bagBtn=()=>`<button class="pill" data-a="cart" aria-label="Bag">${ic('bag')}<span class="badge ${cartCount()?'':'z'}" data-badge>${cartCount()||''}</span></button>`;
+const sec=(title,right='')=>`<div class="hdr sec"><button class="ib" data-a="back" aria-label="Back">${ic('back')}</button><h1>${title}</h1><div class="r">${right||'<span style="width:44px"></span>'}</div></div>`;
+const RAT=[.82,1,1.12,.95,1.08,.88];
+function pcard(p,i){const visual=p.images&&p.images[0]?`<img src="${esc(p.images[0])}" alt="${esc(p.n)}" loading="lazy" style="width:100%;height:100%;object-fit:cover">`:art(p.k,p.col);return `<div class="pc" data-a="card" data-id="${p.id}"><div class="pi" style="aspect-ratio:${RAT[i%6]}">${visual}</div>${heart(p.id)}<div class="pb"><small>${esc(p.t)}</small><b>${esc(p.n)}</b><span>${rs(p.p)}</span></div></div>`}
+function gridHTML(){const l=P.filter(p=>state.selectedCategory==='All'||p.c===state.selectedCategory);
+ if(!l.length)return '<div class="empty">No products here yet.</div>';
+ const a=[],b=[];l.forEach((p,i)=>(i%2?b:a).push(pcard(p,i)));return `<div class="cols"><div class="col">${a.join('')}</div><div class="col">${b.join('')}</div></div>`}
+const CATS=[['All',null],['Clothing',['tee','#7e9bb8']],['Shoes',['sneaker','#222']],['Hats',['beanie','#8c6b55']],['Bags',['bag','#222']]];
+function catsHTML(){return ['All',...new Set(P.map(p=>p.c).filter(Boolean))].map(n=>{const t=CATS.find(([name])=>name===n)?.[1];return `<button class="cat ${t?'':'nt'} ${state.selectedCategory===n?'on':''}" data-a="cat" data-v="${esc(n)}">${t?`<i>${art(t[0],t[1])}</i>`:''}${esc(n)}</button>`}).join('')}
+const S={};
+S.home=()=>`<div class="scr ${fabellRemotePayload?.settings?.announcement?'has-announcement':''}">${fabellRemotePayload?.settings?.announcement?`<div class="announcement">${esc(fabellRemotePayload.settings.announcement)}</div>`:''}<div class="hh"><button class="ib" data-a="profile" aria-label="Profile">${ic('user')}</button><div class="r"><button class="ib" data-a="search" aria-label="Search">${ic('search')}</button>${bagBtn()}</div></div><div class="brand-wordmark">${esc(fabellRemotePayload?.settings?.logoText||fabellRemotePayload?.settings?.storeName||'FABELL')}</div>
+<div class="hero" id="hero">${SL.map((s,i)=>`<div class="slide ${i?'':'on'}" style="background:${s.bg}"><div class="art">${s.img?`<img src="${esc(s.img)}" alt="${esc(s.h)}" style="width:100%;height:100%;object-fit:cover">`:art(s.k,s.col)}</div><div class="ov"></div><div class="tx"><h2>${s.h}</h2><p>${s.s}</p><span class="cta">${s.b}<i>${ic('arrow')}</i></span></div><div class="tag">${ic(s.tag[0])}<span>${s.tag[1]}</span></div></div>`).join('')}<div class="dots">${SL.map((_,i)=>`<b class="${i?'':'on'}"></b>`).join('')}</div></div>
+<div class="cats" id="cats">${catsHTML()}</div><div id="grid">${gridHTML()}</div></div>`;
+S.detail=()=>{const p=byId(state.params.id),sz=sizesFor(p);
+ return `<div class="scr sec fx"><div class="scroll"><div class="gal" id="gal"><div class="hh"><button class="ib" data-a="back" aria-label="Back">${ic('back')}</button><div class="r"><button class="ib" data-a="share" aria-label="Share">${ic('share')}</button>${heart(p.id).replace('class="heart','class="ib heart').replace('position:absolute','')}</div></div>
+ <div class="trk" id="trk">${[0,1,2].map(v=>`<div class="gs" style="background:${BG[v]}">${p.images&&p.images.length?`<img src="${esc(p.images[v%p.images.length])}" alt="${esc(p.n)}" style="width:100%;height:100%;object-fit:cover">`:art(p.k,p.col,v)}</div>`).join('')}</div><div class="dots" id="gd"><b class="on"></b><b></b><b></b></div></div>
+ <div class="info"><span class="cp">${p.nw?'New Arrival':p.c} </span><div class="tr"><h2>${p.n}</h2><span>${rs(p.p)}</span></div><p>${p.d}</p>
+ ${sz?`<div class="sz"><h4>Select size</h4><div class="szs" id="szs">${szHTML(sz)}</div></div>`:''}</div></div>
+ <div class="bar"><button class="btn ol" data-a="add">Add to Cart</button><button class="btn dk" data-a="buy">Buy Now</button></div></div>`};
+const szHTML=sz=>sz.map(s=>`<button class="${state.size===s?'on':''}" data-a="size" data-v="${s}">${s}</button>`).join('');
+S.cart=()=>{const c=state.cart;
+ if(!c.length)return `<div class="scr sec fx">${sec('Shopping Bag')}<div class="scroll"><div class="empty"><div style="width:84px;height:84px;border-radius:50%;background:#fff;margin:0 auto 16px;display:flex;align-items:center;justify-content:center">${ic('bag').replace('class="ic','style="width:34px;height:34px" class="ic')}</div><h3 style="color:#111;margin:0 0 6px;font-size:18px">Your bag is empty</h3><p style="margin:0 0 20px">Add something you like and it will show up here.</p><button class="btn dk" data-a="home" style="display:inline-flex">Start Shopping</button></div></div></div>`;
+ const n=cartCount();
+ return `<div class="scr sec fx">${sec('Shopping Bag')}<div class="scroll">${c.map((x,i)=>{const p=byId(x.id);return `<div class="ci"><div class="th">${p.images&&p.images[0]?`<img src="${esc(p.images[0])}" alt="${esc(p.n)}" style="width:100%;height:100%;object-fit:cover">`:art(p.k,p.col)}</div><div class="m"><div><small>${p.t}</small><b>${p.n}</b></div><span class="pr">${rs(p.p)}</span></div><div class="rt"><span>${x.size||p.c}</span><div class="qty"><button data-a="q" data-i="${i}" data-d="-1" aria-label="Decrease quantity">−</button>${x.qty}<button data-a="q" data-i="${i}" data-d="1" aria-label="Increase quantity">+</button></div></div><button class="del" data-a="del" data-i="${i}" aria-label="Remove">${ic('trash')}</button></div>`}).join('')}</div>
+ <div class="bar"><div class="sum"><div><small>Subtotal · ${n} item${n>1?'s':''}</small><strong>${rs(subtotal())}</strong></div><button class="btn dk" data-a="checkout">Checkout</button></div></div></div>`};
+S.checkout=()=>{if(!state.cart.length)return S.cart();const u=state.userProfile,st=subtotal(),ok=addrOK(u);
+ return `<div class="scr sec fx">${sec('Order Checkout')}<div class="scroll">
+ <div class="box"><h3>Delivery Address<button class="ib" style="width:40px;height:40px" data-a="edit" aria-label="${ok?'Edit':'Add'} address">${ic('edit')}</button></h3>${ok?`<p><span class="nm">${esc(u.name)}</span><br>+91 ${esc(u.phone)}<br>${esc(addr(u))}</p>`:`<p>No delivery address yet. Add one to place your order.</p><button class="btn ol sm" style="margin-top:12px" data-a="edit">Add address</button>`}</div>
+ <div class="box"><h3>Payment Method</h3><div class="cod"><div class="rad"></div><div><b>Cash on Delivery</b><span>Pay on Delivery via Cash/UPI</span></div></div></div>
+ <div class="box"><h3>Order Summary</h3>${state.cart.map(x=>{const p=byId(x.id);return `<div class="ln"><span>${p.n}${x.size?' · '+x.size:''} × ${x.qty}</span><span>${rs(p.p*x.qty)}</span></div>`}).join('')}<div class="ln"><span>Delivery</span><span>Free</span></div><div class="ln t"><span>Total</span><span>${rs(st)}</span></div></div></div>
+ <div class="bar"><div class="sum"><div><small>Total</small><strong>${rs(st)}</strong></div><button class="btn dk" data-a="place">Place Order</button></div></div></div>`};
+function resHTML(){const q=state.searchQuery.trim().toLowerCase();
+ if(!q)return P.length?'<div class="sh">Popular picks</div>'+P.slice(0,6).map(sr).join(''):'<div class="empty">No products are available yet.</div>';
+ const l=P.filter(p=>(p.n+' '+p.t+' '+p.c).toLowerCase().includes(q)&&(!state.sGender||p.g===state.sGender));
+ return l.length?`<div class="sh">${l.length} result${l.length>1?'s':''}</div>`+l.map(sr).join(''):'<div class="empty">No matches. Try another word or filter.</div>'}
+const sr=p=>`<div class="sr" data-a="card" data-id="${p.id}"><div class="th">${p.images&&p.images[0]?`<img src="${esc(p.images[0])}" alt="${esc(p.n)}" style="width:100%;height:100%;object-fit:cover">`:art(p.k,p.col)}</div><div style="flex:1;min-width:0"><small>${p.t}</small><b>${p.n}</b><span>${rs(p.p)}</span></div>${heart(p.id)}</div>`.replace('class="heart','style="position:static" class="heart');
+S.search=()=>`<div class="scr sec fx">${sec('Search Catalog')}<div class="sb">${ic('search')}<input id="q" type="search" placeholder="Search sneakers, hoodies, caps…" enterkeyhint="search" value="${state.searchQuery.replace(/"/g,'&quot;')}" autocomplete="off"></div>
+<div class="gp" id="gp" ${state.searchQuery.trim()?'':'hidden'}>${['Men','Women','Unisex'].map(g=>`<button class="${state.sGender===g?'on':''}" data-a="gen" data-v="${g}">${g}</button>`).join('')}</div><div class="scroll" id="sres">${resHTML()}</div></div>`;
+const STG=['Placed','Dispatched','In Transit','Delivered'];
+function ordHTML(){return state.orders.length?state.orders.map(o=>{const s=o.cancelled?['Cancelled','c']:o.stage>=3?['Delivered','d']:['In Transit',''];
+ return `<div class="box"><div class="oh"><b>${o.id}</b><span class="st ${s[1]}">${s[0]}</span></div><p style="margin-top:6px">${o.date} · <span class="nm">${rs(o.total)}</span></p><p style="margin-top:4px;font-size:13px">${o.items.map(i=>i.n+(i.size?' ('+i.size+')':'')+' × '+i.qty).join(', ')}</p><div class="oa"><button class="btn ol sm" data-a="track" data-id="${o.id}">Track Order</button>${!o.cancelled&&o.stage<3?`<button class="btn sm" style="background:#fde8ea;color:var(--red)" data-a="cancel" data-id="${o.id}">Cancel Order</button>`:''}</div></div>`}).join(''):'<div class="box" style="text-align:center;padding:28px 20px"><b>No orders yet</b><p style="margin:6px 0 16px">Your orders and tracking will show up here.</p><button class="btn ol sm" style="display:inline-flex" data-a="home">Start Shopping</button></div>'}
+S.profile=()=>{const u=state.userProfile;
+ const card=hasProfile(u)?`<div class="box"><div class="ph"><div class="av">${ic('user')}</div><div class="i"><b>${esc(u.name)||'Guest'}</b>${u.phone?`<small>+91 ${esc(u.phone)}</small>`:''}<small>${u.house?esc([u.house,u.city].filter(Boolean).join(', ')):'No delivery address added yet'}</small></div><button class="ib" data-a="edit" aria-label="Edit profile">${ic('edit')}</button></div></div>`
+ :`<div class="box" style="text-align:center;padding:28px 20px"><div class="av" style="margin:0 auto 14px;width:72px;height:72px">${ic('user')}</div><b style="font-size:17px">Welcome to Fabell</b><p style="margin:6px 0 18px">Add your name and delivery address to check out faster.</p><button class="btn dk" style="width:100%" data-a="edit">Add details</button></div>`;
+ return `<div class="scr sec">${sec('My Profile')}${card}<div class="sh" style="padding-top:8px">My Orders</div><div id="ords">${ordHTML()}</div></div>`};
+/* ---------- render / nav ---------- */
+function render(keep){clearInterval(heroT);const sc=keep&&$('.scroll'),top=sc?sc.scrollTop:0,wy=scrollY;$('#app').innerHTML=S[state.currentScreen]();if(keep){$('.scr').style.animation='none';const n=$('.scroll');if(n)n.scrollTop=top;scrollTo(0,wy)}else scrollTo(0,0);
+ if(state.currentScreen==='home')initHero();if(state.currentScreen==='detail')initGal();
+ if(state.currentScreen==='search'){const q=$('#q');q.addEventListener('input',e=>{state.searchQuery=e.target.value;$('#gp').hidden=!state.searchQuery.trim();if(!state.searchQuery.trim())state.sGender='',$$('#gp button').forEach(b=>b.classList.remove('on'));$('#sres').innerHTML=resHTML()});q.focus()}}
+function go(s,params={}){hist.push([state.currentScreen,state.params]);state.currentScreen=s;state.params=params;
+ if(s==='search'){state.searchQuery='';state.sGender=''}if(s==='detail'){const sz=sizesFor(byId(params.id));state.size=sz?sz[Math.min(1,sz.length-1)]:null}render()}
+function back(){const h=hist.pop()||['home',{}];state.currentScreen=h[0];state.params=h[1];render()}
+const upBadge=()=>$$('[data-badge]').forEach(b=>{const n=cartCount();b.textContent=n||'';b.classList.toggle('z',!n)});
+let tt;function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('on'),1800)}
+function addCart(){const p=byId(state.params.id),sz=sizesFor(p)?state.size:'';const x=state.cart.find(c=>c.id===p.id&&c.size===sz);x?x.qty++:state.cart.push({id:p.id,size:sz,qty:1});upBadge()}
+/* ---------- hero carousel ---------- */
+function showSlide(i){heroI=(i+SL.length)%SL.length;$$('.slide').forEach((s,j)=>s.classList.toggle('on',j===heroI));$$('.dots b').forEach((d,j)=>d.classList.toggle('on',j===heroI))}
+function heroTimer(){clearInterval(heroT);if(fabellRemotePayload?.settings?.heroAutoplay===false)return;heroT=setInterval(()=>showSlide(heroI+1),3500)}
+function pickCat(c){state.selectedCategory=c;$('#cats').innerHTML=catsHTML();$('#grid').innerHTML=gridHTML();$('#cats').scrollIntoView({behavior:'smooth',block:'start'})}
+function initHero(){heroI=0;heroTimer();const h=$('#hero');let x0=null,dx=0;
+ const dn=e=>{x0=e.clientX;dx=0;clearInterval(heroT)},mv=e=>{if(x0!==null)dx=e.clientX-x0},
+ up=()=>{if(x0===null)return;if(Math.abs(dx)>40)showSlide(heroI+(dx<0?1:-1));else if(Math.abs(dx)<8)pickCat(SL[heroI].cat);x0=null;heroTimer()};
+ h.addEventListener('pointerdown',dn);h.addEventListener('pointermove',mv);h.addEventListener('pointerup',up);h.addEventListener('pointercancel',()=>{x0=null;heroTimer()});
+ h.addEventListener('touchstart',e=>{if(x0===null)dn(e.touches[0])},{passive:true});h.addEventListener('touchmove',e=>mv(e.touches[0]),{passive:true});h.addEventListener('touchend',up);
+ h.addEventListener('dragstart',e=>e.preventDefault())}
+/* ---------- gallery ---------- */
+function initGal(){const g=$('#gal'),t=$('#trk');let i=0,x0=null,dx=0,w=g.offsetWidth;
+ const set=n=>{i=Math.max(0,Math.min(2,n));t.style.transform=`translateX(${-i*100}%)`;$$('#gd b').forEach((d,j)=>d.classList.toggle('on',j===i))};
+ const dn=e=>{if(e.target.closest('button'))return;x0=e.clientX;dx=0;w=g.offsetWidth;t.classList.add('drag')},
+ mv=e=>{if(x0===null)return;dx=e.clientX-x0;t.style.transform=`translateX(${-i*w+dx}px)`},
+ up=()=>{if(x0===null)return;t.classList.remove('drag');x0=null;set(Math.abs(dx)>50?i+(dx<0?1:-1):i)};
+ g.addEventListener('pointerdown',dn);g.addEventListener('pointermove',mv);g.addEventListener('pointerup',up);g.addEventListener('pointercancel',up);
+ g.addEventListener('touchstart',e=>{if(x0===null)dn(e.touches[0])},{passive:true});g.addEventListener('touchmove',e=>mv(e.touches[0]),{passive:true});g.addEventListener('touchend',up);g.addEventListener('dragstart',e=>e.preventDefault())}
+/* ---------- modals ---------- */
+function modal(h){document.body.style.overflow='hidden';$('#ovl').innerHTML=`<div class="ovl" data-a="closeM"><div class="sheet" onclick="event.stopPropagation()">${h}</div></div>`}
+const closeM=()=>{$('#ovl').innerHTML='';document.body.style.overflow=''};
+function editModal(){const u=state.userProfile,f=(k,l,ex='')=>`<div class="fld"><label for="f_${k}">${l}</label><input id="f_${k}" value="${esc(u[k])}" ${ex}></div>`;
+ modal(`<h3>Your details</h3>${f('name','Full name','autocomplete="name"')}${f('phone','Phone number','inputmode="numeric" maxlength="10" autocomplete="tel-national" placeholder="10-digit mobile number"')}${f('house','House No. / Building Name / Flat','autocomplete="address-line1"')}${f('road','Road Name / Area / Colony','autocomplete="address-line2"')}<div class="fr">${f('city','City','autocomplete="address-level2"')}${f('state','State','autocomplete="address-level1"')}</div>${f('pin','Pincode','inputmode="numeric" maxlength="6" autocomplete="postal-code" placeholder="6 digits"')}<div class="err" id="err" role="alert"></div><button class="btn dk" style="width:100%" data-a="saveAddr">Save details</button>`)}
+function saveAddr(){const k=['name','phone','house','road','city','state','pin'],v={};k.forEach(x=>v[x]=$('#f_'+x).value.trim());v.phone=v.phone.replace(/\D/g,'');
+ const e=k.find(x=>!v[x])?'Please fill in all the fields.':!/^\d{10}$/.test(v.phone)?'Enter a valid 10-digit phone number.':!/^\d{6}$/.test(v.pin)?'Pincode must be 6 digits.':'';
+ if(e){$('#err').textContent=e;return}Object.assign(state.userProfile,v);closeM();render();toast('Details saved')}
+function trackModal(id){const o=state.orders.find(x=>x.id===id),n=o.cancelled?-1:o.stage;
+ modal(`<h3>Track ${o.id}</h3>${o.cancelled?'<div class="empty" style="padding:20px 0">This order was cancelled.</div>':`<div class="stp"><i style="width:${n/3*76}%"></i>${STG.map((s,i)=>`<div class="sp ${i<=n?'on':''}"><u>${i<=n?ic('check'):''}</u>${s}</div>`).join('')}</div>`}<button class="btn dk" style="width:100%;margin-top:18px" data-a="closeM">Close</button>`)}
+/* ---------- order success: chime + confetti ---------- */
+function chime(){try{const a=new(window.AudioContext||window.webkitAudioContext)();[523.25,659.25,783.99,1046.5].forEach((f,i)=>{const o=a.createOscillator(),g=a.createGain(),t=a.currentTime+i*.12;o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.22,t+.02);g.gain.exponentialRampToValueAtTime(.001,t+.8);o.connect(g);g.connect(a.destination);o.start(t);o.stop(t+.85)})}catch(e){}}
+function confetti(){const c=$('#cf'),x=c.getContext('2d');c.hidden=false;c.width=innerWidth;c.height=innerHeight;const C=['#111','#e63946','#f4a261','#2a9d8f','#e9c46a','#8d99ae'];
+ const ps=Array.from({length:150},()=>({x:c.width/2,y:c.height*.4,vx:(Math.random()-.5)*16,vy:-Math.random()*16-4,s:Math.random()*8+4,r:Math.random()*6,vr:(Math.random()-.5)*.4,c:C[Math.random()*6|0]}));let f=0;
+ (function l(){x.clearRect(0,0,c.width,c.height);ps.forEach(p=>{p.vy+=.35;p.vx*=.99;p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;x.save();x.translate(p.x,p.y);x.rotate(p.r);x.fillStyle=p.c;x.globalAlpha=Math.max(0,1-f/170);x.fillRect(-p.s/2,-p.s/3,p.s,p.s*.6);x.restore()});if(++f<170)requestAnimationFrame(l);else c.hidden=true})()}
+function placeOrder(){const id='#IND-'+(1000+Math.floor(Math.random()*9000)),total=subtotal(),d=new Date().toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
+ const items=state.cart.map(x=>({n:byId(x.id).n,size:x.size,qty:x.qty}));state.orders.unshift({id,date:d,total,stage:0,cancelled:false,items});state.cart=[];upBadge();
+ $('#ovl').innerHTML=`<div class="ovl succ"><div class="in"><div class="ck">${ic('check')}</div><h2>Order placed!</h2><p>Thank you for shopping with Fabell. Your order details are below.</p><div class="oid">${id}</div><div class="box">${items.map(i=>`<div class="ln"><span>${i.n}${i.size?' · '+i.size:''} × ${i.qty}</span></div>`).join('')}<div class="ln t"><span>Total (Cash on Delivery)</span><span>${rs(total)}</span></div></div><button class="btn dk" style="width:100%" data-a="orders">View my orders</button></div></div>`;chime();confetti()}
+/* ---------- events ---------- */
+document.addEventListener('click',e=>{const el=e.target.closest('[data-a]');if(!el)return;const a=el.dataset.a,id=el.dataset.id;
+ switch(a){
+ case'wish':{const n=+id;state.wishlist.has(n)?state.wishlist.delete(n):state.wishlist.add(n);$$(`[data-a="wish"][data-id="${n}"]`).forEach(b=>b.classList.toggle('on',state.wishlist.has(n)));break}
+ case'home':hist.length=0;state.currentScreen='home';state.params={};render();break;case'profile':go('profile');break;case'search':go('search');break;case'cart':go('cart');break;case'back':back();break;
+ case'card':go('detail',{id:+id});break;
+ case'cat':state.selectedCategory=el.dataset.v;$('#cats').innerHTML=catsHTML();$('#grid').innerHTML=gridHTML();break;
+ case'size':state.size=el.dataset.v;$('#szs').innerHTML=szHTML(sizesFor(byId(state.params.id)));break;
+ case'add':addCart();toast('Added to your Bag');break;
+ case'buy':addCart();go('checkout');break;
+ case'share':{const u=location.href,t='Check out '+byId(state.params.id).n+' on Fabell';try{navigator.share?navigator.share({title:t,url:u}).catch(()=>{}):navigator.clipboard.writeText(u).then(()=>toast('Link copied'))}catch(x){toast('Link copied')}break}
+ case'q':{const x=state.cart[+el.dataset.i];x.qty+=+el.dataset.d;if(x.qty<1)state.cart.splice(+el.dataset.i,1);render(true);break}
+ case'del':state.cart.splice(+el.dataset.i,1);render(true);break;
+ case'checkout':go('checkout');break;
+ case'gen':{const v=el.dataset.v;state.sGender=state.sGender===v?'':v;$$('#gp button').forEach(b=>b.classList.toggle('on',b.dataset.v===state.sGender));$('#sres').innerHTML=resHTML();break}
+ case'edit':editModal();break;case'saveAddr':saveAddr();break;
+ case'place':if(!addrOK(state.userProfile)){toast('Add your delivery address first');editModal()}else placeOrder();break;
+ case'orders':closeM();hist.length=0;hist.push(['home',{}]);state.currentScreen='profile';render();break;
+ case'track':trackModal(id);break;
+ case'cancel':{const o=state.orders.find(x=>x.id===id);o.cancelled=true;$('#ords').innerHTML=ordHTML();toast('Order cancelled');break}
+ case'closeM':closeM();break}});
+document.addEventListener('focusin',e=>{if(e.target.matches('input')&&e.target.closest('.sheet'))setTimeout(()=>e.target.scrollIntoView({block:'center',behavior:'smooth'}),300)});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('.ovl:not(.succ)'))closeM()});
+
+// ---------- Fabell shared catalogue integration ----------
+const FABELL_SUPABASE_URL='https://rxtxyltywwfppaastfyn.supabase.co';
+const FABELL_SUPABASE_KEY='sb_publishable_Mo7SOjDPOZUt5bHrHzMX7w_Pm3C0L-i';
+const fabellDb=window.supabase.createClient(FABELL_SUPABASE_URL,FABELL_SUPABASE_KEY);
+let fabellRemotePayload=null;
+function fabellMapProduct(p,i){
+ const category=p.category||p.c||'Clothing';
+ const type=p.type||p.t||'tee';
+ const key=({tee:'tee','t-shirt':'tee',hoodie:'hoodie',sweater:'sweater',jacket:'jacket',sneaker:'sneaker',shoes:'sneaker',beanie:'beanie',cap:'cap',bag:'bag',duffel:'bag'})[String(type).toLowerCase()]||({Clothing:'tee',Shoes:'sneaker',Hats:'beanie',Bags:'bag'})[category]||'tee';
+ return {id:i+1,dbId:p.id,n:p.title||p.n||'Untitled product',c:category,t:type,g:p.gender||p.g||'Unisex',p:Number(p.price??p.p??0),k:key,col:p.color||p.col||'#222222',d:p.description||p.d||'',nw:!!(p.isNew||p.nw),images:Array.isArray(p.images)?p.images:[],sizes:Array.isArray(p.sizes)?p.sizes:[]};
+}
+function fabellApplySettings(settings={}){
+ const root=document.documentElement;
+ if(settings.backgroundColor)root.style.setProperty('--bg',settings.backgroundColor);
+ if(settings.cardColor)root.style.setProperty('--card',settings.cardColor);
+ if(settings.borderRadius)root.style.setProperty('--radius',settings.borderRadius);
+ if(settings.heroHeight)root.style.setProperty('--hero-height',settings.heroHeight);
+ if(settings.textColor)root.style.setProperty('--ink',settings.textColor);
+ if(settings.primaryColor)root.style.setProperty('--red',settings.primaryColor);
+ if(settings.fontFamily)document.body.style.fontFamily=`${settings.fontFamily},Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif`;
+ if(settings.storeName)document.title=settings.storeName+' — Everyday, Reimagined';
+}
+async function fabellLoadStore(){
+ try{
+  const {data,error}=await fabellDb.from('store_data').select('payload').eq('id',1).single();
+  if(error)throw error;
+  const payload=data&&data.payload;
+  if(!payload)throw new Error('Store settings are missing');
+  fabellRemotePayload=payload;
+  if(Array.isArray(payload.products))P=payload.products.map(fabellMapProduct);
+  if(Array.isArray(payload.banners)&&payload.banners.length){
+   SL=payload.banners.map((b,i)=>({h:b.title||b.h||'Discover Fabell',s:b.subtitle||b.s||'',b:b.btnText||b.b||'Shop Now',cat:b.category||b.cat||'Clothing',k:'tee',col:'#252525',bg:['linear-gradient(160deg,#a5afa0,#4c5645)','linear-gradient(160deg,#b4bac2,#59616b)','linear-gradient(160deg,#cdbfae,#7b6a58)'][i%3],tag:['sparkles',b.badge||'Fabell collection'],img:b.img||b.image||''}));
+  }
+  fabellApplySettings(payload.settings||{});
+  // Keep the category filter valid after the admin changes the catalogue.
+  if(!['All',...new Set(P.map(p=>p.c))].includes(state.selectedCategory))state.selectedCategory='All';
+  if(state.currentScreen==='home')render(true);
+ }catch(err){console.warn('Fabell shared catalogue unavailable; showing the built-in preview catalogue.',err)}
+}
+
+// ---------- Live customer account, saved address, real orders & delivery tracking ----------
+let fabellSession=null, fabellCustomerOrders=[], fabellBusy=false, fabellAuthReturnScreen='profile';
+const fabellUser=()=>fabellSession?.user||null;
+const fabellAddressPayload=()=>({name:state.userProfile.name,phone:state.userProfile.phone,address:[state.userProfile.house,state.userProfile.road].filter(Boolean).join(', '),city:state.userProfile.city,state:state.userProfile.state,pin:state.userProfile.pin});
+async function fabellLoadCustomer(){
+ const user=fabellUser(); if(!user){state.userProfile={name:'',phone:'',house:'',road:'',city:'',state:'',pin:''};fabellCustomerOrders=[];return}
+ const [{data:profile,error:pe},{data:orders,error:oe}]=await Promise.all([
+  fabellDb.from('customer_profiles').select('full_name,phone,address').eq('user_id',user.id).maybeSingle(),
+  fabellDb.from('store_orders').select('*').order('created_at',{ascending:false}).limit(100)
+ ]);
+ if(pe)throw pe;if(oe)throw oe;
+ const a=profile?.address||{};state.userProfile={name:profile?.full_name||a.name||'',phone:profile?.phone||a.phone||'',house:a.house||a.address_line1||'',road:a.road||a.address_line2||'',city:a.city||'',state:a.state||'',pin:a.pin||''};
+ fabellCustomerOrders=orders||[];
+}
+function fabellAuthModal(){fabellAuthReturnScreen=state.currentScreen==='checkout'?'checkout':'profile';modal(`<h3>Welcome to Fabell</h3><p style="color:var(--mut);font-size:14px">Sign in to save your address, place orders and track delivery.</p><div class="fld"><label for="authEmail">Email address</label><input id="authEmail" type="email" autocomplete="email" placeholder="you@example.com" required></div><div class="fld"><label for="authPass">Password</label><input id="authPass" type="password" autocomplete="current-password" minlength="6" placeholder="At least 6 characters" required></div><div id="authMsg" class="err" role="status"></div><button class="btn dk" style="width:100%;margin:8px 0" data-a="authSignIn">Sign in</button><button class="btn ol" style="width:100%" data-a="authSignUp">Create account</button><button style="width:100%;padding:14px;color:var(--mut);font-size:13px" data-a="authReset">Forgot password?</button>`)}
+async function fabellAuthAction(kind){const email=$('#authEmail')?.value.trim(),password=$('#authPass')?.value;const msg=$('#authMsg');if(!email){msg.textContent='Enter your email address.';return}if(kind!=='authReset'&&(!password||password.length<6)){msg.textContent='Password must be at least 6 characters.';return}msg.textContent='Please wait…';let result;
+ if(kind==='authSignIn')result=await fabellDb.auth.signInWithPassword({email,password});
+ else if(kind==='authSignUp')result=await fabellDb.auth.signUp({email,password,options:{emailRedirectTo:location.origin+location.pathname}});
+ else result=await fabellDb.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname});
+ if(result.error){msg.textContent=result.error.message;return}
+ if(kind==='authSignUp'&&!result.data.session){msg.textContent='Account created. Check your email to confirm the account, then sign in.';return}
+ if(kind==='authReset'){msg.textContent='If that account exists, a password-reset email has been sent.';return}
+ closeM();fabellSession=result.data.session;await fabellLoadCustomer();state.currentScreen=fabellAuthReturnScreen;render();toast('Signed in successfully');
+}
+S.profile=()=>{const user=fabellUser(),u=state.userProfile;const account=user?`<div class="box"><div class="ph"><div class="av">${ic('user')}</div><div class="i"><b>${esc(u.name||user.email||'Fabell customer')}</b><small>${esc(user.email||'')}</small><small>${u.phone?'+91 '+esc(u.phone):'Add your delivery address'}</small></div><button class="ib" data-a="edit" aria-label="Edit profile">${ic('edit')}</button></div><button class="btn ol sm" data-a="authSignOut" style="margin-top:12px">Sign out</button></div>`:`<div class="box" style="text-align:center;padding:28px 20px"><div class="av" style="margin:0 auto 14px;width:72px;height:72px">${ic('user')}</div><b style="font-size:17px">Welcome to Fabell</b><p style="margin:6px 0 18px">Sign in or create an account to save your address and track your orders.</p><button class="btn dk" style="width:100%" data-a="authOpen">Sign in / Create account</button></div>`;
+ const orders=user?fabellCustomerOrders.map(o=>{const status=String(o.status||'placed').replaceAll('_',' ');const items=(o.items||[]).map(i=>`${esc(i.title||'Item')}${i.size?' · '+esc(i.size):''} × ${i.qty||1}`).join(', ');return `<div class="box"><div class="oh"><b>${esc(o.order_number||o.id)}</b><span class="st ${o.status==='delivered'?'d':''}">${esc(status)}</span></div><p style="margin-top:6px">${new Date(o.created_at).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'})} · <span class="nm">${rs(o.total)}</span></p><p style="margin-top:4px;font-size:13px">${items}</p>${o.tracking_note?`<p style="font-size:13px">${esc(o.tracking_note)}</p>`:''}${o.tracking_carrier?`<p style="font-size:13px">Courier: ${esc(o.tracking_carrier)}${o.tracking_number?' · '+esc(o.tracking_number):''}</p>`:''}${o.estimated_delivery?`<p style="font-size:13px">Estimated delivery: ${esc(o.estimated_delivery)}</p>`:''}${o.tracking_url?`<a class="btn ol sm" href="${esc(o.tracking_url)}" target="_blank" rel="noopener noreferrer" style="display:inline-flex;text-decoration:none;margin-top:8px">Open courier tracking</a>`:''}<button class="btn ol sm" data-a="track" data-id="${esc(o.id)}" style="margin-top:8px">View tracking details</button></div>`}).join(''):'<div class="box" style="text-align:center;padding:28px 20px"><b>No orders yet</b><p style="margin:6px 0 16px">Your order history will appear here after checkout.</p><button class="btn ol sm" data-a="home">Start Shopping</button></div>';
+ return `<div class="scr sec">${sec('My Profile')}${account}<div class="sh" style="padding-top:8px">My Orders</div><div id="ords">${orders||'<div class="box">No orders yet.</div>'}</div></div>`};
+editModal=function(){if(!fabellUser()){fabellAuthModal();return}const u=state.userProfile,f=(k,l,ex='')=>`<div class="fld"><label for="f_${k}">${l}</label><input id="f_${k}" value="${esc(u[k])}" ${ex}></div>`;modal(`<h3>Your delivery details</h3>${f('name','Full name','autocomplete="name"')}${f('phone','Phone number','inputmode="numeric" maxlength="10" autocomplete="tel-national" placeholder="10-digit mobile number"')}${f('house','House No. / Building Name / Flat','autocomplete="address-line1"')}${f('road','Road Name / Area / Colony','autocomplete="address-line2"')}<div class="fr">${f('city','City','autocomplete="address-level2"')}${f('state','State','autocomplete="address-level1"')}</div>${f('pin','Pincode','inputmode="numeric" maxlength="6" autocomplete="postal-code" placeholder="6 digits"')}<div class="err" id="err" role="alert"></div><button class="btn dk" style="width:100%" data-a="saveAddr">Save details</button>`)};
+saveAddr=async function(){if(!fabellUser()){fabellAuthModal();return}const k=['name','phone','house','road','city','state','pin'],v={};k.forEach(x=>v[x]=$('#f_'+x).value.trim());v.phone=v.phone.replace(/\D/g,'');const e=k.find(x=>!v[x])?'Please fill in all the fields.':!/^[6-9]\d{9}$/.test(v.phone)?'Enter a valid Indian 10-digit mobile number.':!/^\d{6}$/.test(v.pin)?'Pincode must be 6 digits.':'';if(e){$('#err').textContent=e;return}const user=fabellUser(),address={house:v.house,road:v.road,city:v.city,state:v.state,pin:v.pin,name:v.name,phone:v.phone};const {error}=await fabellDb.from('customer_profiles').upsert({user_id:user.id,full_name:v.name,phone:v.phone,address,updated_at:new Date().toISOString()},{onConflict:'user_id'});if(error){$('#err').textContent=error.message;return}state.userProfile=v;closeM();render();toast('Delivery details saved')};
+placeOrder=async function(){if(fabellBusy)return;if(!fabellUser()){toast('Sign in before placing an order');fabellAuthModal();return}if(!addrOK(state.userProfile)){toast('Add your delivery address first');editModal();return}if(!state.cart.length){toast('Your bag is empty');return}fabellBusy=true;const btn=$('[data-a="place"]');if(btn){btn.disabled=true;btn.textContent='Placing…'}try{const items=state.cart.map(x=>{const p=byId(x.id);return{id:String(p.dbId??p.id),qty:x.qty,size:x.size||''}});const {data,error}=await fabellDb.rpc('place_store_order',{p_items:items,p_shipping_address:fabellAddressPayload()});if(error)throw error;const order=data?.order_number||'Order placed';state.cart=[];upBadge();await fabellLoadCustomer();$('#ovl').innerHTML=`<div class="ovl succ"><div class="in"><div class="ck">${ic('check')}</div><h2>Order placed!</h2><p>Your Fabell order has been saved. You can track its progress from My Profile.</p><div class="oid">${esc(order)}</div><div class="box"><div class="ln t"><span>Total (Cash on Delivery)</span><span>${rs(data?.total??0)}</span></div></div><button class="btn dk" style="width:100%" data-a="orders">View my orders</button></div></div>`;chime();confetti()}catch(e){console.error(e);toast(e.message||'Could not place the order. Please try again.')}finally{fabellBusy=false;const b=$('[data-a="place"]');if(b){b.disabled=false;b.textContent='Place Order'}}};
+trackModal=function(id){const o=fabellCustomerOrders.find(x=>x.id===id);if(!o){toast('Order not found. Refresh your profile and try again.');return}const labels={placed:'Order placed',confirmed:'Confirmed',processing:'Processing',dispatched:'Dispatched',in_transit:'In transit',out_for_delivery:'Out for delivery',delivered:'Delivered',cancelled:'Cancelled',returned:'Returned'};const status=labels[o.status]||String(o.status||'placed').replaceAll('_',' ');const history=Array.isArray(o.status_history)?o.status_history:[];modal(`<h3>Track ${esc(o.order_number||o.id)}</h3><div class="box"><b>${esc(status)}</b>${o.tracking_note?`<p>${esc(o.tracking_note)}</p>`:''}${o.tracking_carrier?`<p>Courier: ${esc(o.tracking_carrier)}</p>`:''}${o.tracking_number?`<p>Tracking number: ${esc(o.tracking_number)}</p>`:''}${o.estimated_delivery?`<p>Estimated delivery: ${esc(o.estimated_delivery)}</p>`:''}${o.tracking_url?`<p><a href="${esc(o.tracking_url)}" target="_blank" rel="noopener noreferrer">Track with courier ↗</a></p>`:''}</div>${history.length?`<h4>Updates</h4>${history.slice().reverse().map(h=>`<div class="box"><b>${esc(labels[h.status]||h.status||'Update')}</b><p>${esc(h.note||'')}</p><small>${h.at?new Date(h.at).toLocaleString():''}</small></div>`).join('')}`:''}<button class="btn dk" style="width:100%;margin-top:12px" data-a="closeM">Close</button>`)};
+// Keep the current shared storefront session in sync across tabs and reloads.
+fabellDb.auth.onAuthStateChange((event,session)=>{fabellSession=session;setTimeout(async()=>{try{if(event==='PASSWORD_RECOVERY'){modal(`<h3>Set a new password</h3><div class=\"fld\"><label for=\"newPassword\">New password</label><input id=\"newPassword\" type=\"password\" minlength=\"6\" autocomplete=\"new-password\" placeholder=\"At least 6 characters\"></div><div id=\"passwordMsg\" class=\"err\" role=\"status\"></div><button class=\"btn dk\" style=\"width:100%\" data-a=\"authSetPassword\">Update password</button>`);return}await fabellLoadCustomer();if(state.currentScreen==='profile'||state.currentScreen==='checkout')render(true)}catch(e){console.warn('Could not refresh customer account data',e)}},0)});
+// Extend the existing design's action dispatcher without disturbing shopping interactions.
+document.addEventListener('click',async e=>{const el=e.target.closest('[data-a]');if(!el)return;const a=el.dataset.a;if(a==='authOpen'){fabellAuthModal()}else if(['authSignIn','authSignUp','authReset'].includes(a)){e.preventDefault();await fabellAuthAction(a)}else if(a==='authSetPassword'){const password=$('#newPassword')?.value||'',msg=$('#passwordMsg');if(password.length<6){msg.textContent='Password must be at least 6 characters.';return}const {error}=await fabellDb.auth.updateUser({password});if(error){msg.textContent=error.message;return}closeM();toast('Password updated');}else if(a==='authSignOut'){await fabellDb.auth.signOut();fabellSession=null;await fabellLoadCustomer();state.currentScreen='profile';render();toast('Signed out')} });
+// Replace demo-only local tracking and cancellation actions with database-backed information.
+async function fabellInitSession(){const {data,error}=await fabellDb.auth.getSession();if(error)throw error;fabellSession=data.session;await fabellLoadCustomer()}
+
+render();
+setTimeout(async()=>{try{await fabellInitSession();await fabellLoadStore();if(state.currentScreen==='profile')render(true)}catch(e){console.warn(e);fabellLoadStore()}},0);
+</script></body></html>

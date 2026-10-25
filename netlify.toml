@@ -1,0 +1,4 @@
+[build]
+  publish = "."
+
+# Static HTML storefront; no build command is required.
